@@ -80,7 +80,9 @@ public class Handler {
 
     private void authorize() {
         System.out.println("Authorizing");
+
         try {
+            socket.setSoTimeout(120_000);
             while (!socket.isClosed()) {
                 String msg = in.readUTF();
                 if (msg.startsWith(AUTH_MESSAGE.getCommand())) {
@@ -107,6 +109,7 @@ public class Handler {
                         this.user = nickname;
                         send(AUTH_OK.getCommand() + REGEX + nickname);
                         server.addHandler(this);
+                        socket.setSoTimeout(0);
                         break;
                     }
                 }
